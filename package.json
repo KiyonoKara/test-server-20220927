@@ -1,0 +1,25 @@
+{
+  "name": "test-server-20230927",
+  "version": "1.0.0",
+  "description": "Test server",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KiyonoKara/test-server-20230927.git"
+  },
+  "author": "Me",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KiyonoKara/test-server-20230927/issues"
+  },
+  "homepage": "https://github.com/KiyonoKara/test-server-20230927#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "nodemon": "^3.0.1"
+  }
+}
