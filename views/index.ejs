@@ -33,6 +33,15 @@
                 />
                 <button class="btn" type="submit">Follow <%= user.username %></button>
             </form>
+            <form action="/unfollow" method="POST">
+                <input
+                        type="hidden"
+                        id="unfollow"
+                        name="unfollow"
+                        value="<%= user.username %>"
+                />
+                <button class="btn" type="submit">Unfollow</button>
+            </form>
         </div>
     <% }); %>
 </div>
