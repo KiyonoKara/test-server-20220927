@@ -6,7 +6,7 @@ import Auth from "../auth/authorization.js";
 export default class UserController {
     static async getAllUsers(req, res) {
         const users = await UserAccessor.getAllUsers();
-        res.render("index", {users: users});
+        res.render("index",  { users: users });
     }
 
     static async getLoginPage(req, res) {
@@ -104,6 +104,22 @@ export default class UserController {
 
             if (following.every((follower) => { follower !== toFollow; }) && toFollow !== username) {
                 await UserAccessor.addFollower(username, toFollow);
+            }
+            res.redirect("/");
+        } else {
+            return next();
+        }
+    };
+
+    static async unfollowUser(req, res, next) {
+        if (!req.error) {
+            const toUnfollow = req.body.unfollow;
+            const user = Auth.getUserInfo(req);
+            const username = user.username;
+            const following = user.following;
+
+            if (following.every((follower) => { follower !== toUnfollow; }) && toUnfollow !== username) {
+                await UserAccessor.removeFollower(username, toUnfollow);
             }
             res.redirect("/");
         } else {
