@@ -6,7 +6,9 @@ import Auth from "../auth/authorization.js";
 
 const router = express.Router();
 
-router.route("/").get(UserController.getAllUsers);
+router.route("/")
+    .get(UserController.getAllUsers);
+    //.get(Auth.authorize, UserController.getUserSelf, errorHandler)
 
 router.route("/login").get((req, res) => {
     res.sendFile(path.resolve() + "/login.html");
@@ -41,5 +43,9 @@ router
 router
     .route("/follow")
     .post(Auth.authorize, UserController.followUser, errorHandler);
+
+router
+    .route("/unfollow")
+    .post(Auth.authorize, UserController.unfollowUser, errorHandler);
 
 export default router;
