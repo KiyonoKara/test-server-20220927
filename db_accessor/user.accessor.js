@@ -19,7 +19,7 @@ export default class UserAccessor {
             for await (const doc of User.find()) {
                 users.push(doc);
             }
-            console.log(users);
+            // console.log(users);
             return users;
         } catch (e) {
             throw e;
@@ -43,13 +43,34 @@ export default class UserAccessor {
             const followee = await UserAccessor.getUser(userToFollow);
 
             const followerList = follower.following;
-            followerList.push(userToFollow);
-
             const followeeList = followee.followers;
-            followeeList.push(userWhoFollowed);
+
+            if (!followerList.includes(userToFollow)) {
+                followerList.push(userToFollow);
+                followeeList.push(userWhoFollowed);
+            }
 
             await User.findOneAndUpdate({ username: userWhoFollowed }, { following: followerList });
-            await User.findOneAndUpdate({ username: userToFollow }, { following: followeeList });
+            await User.findOneAndUpdate({ username: userToFollow }, { followers: followeeList });
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    static async removeFollower(userWhoFollowed, userToUnfollow) {
+        try {
+            await Connection.open("users");
+            const follower = await UserAccessor.getUser(userWhoFollowed);
+            const followee = await UserAccessor.getUser(userToUnfollow);
+
+            const followerList = follower.following;
+            const followeeList = followee.followers;
+            if (followeeList.includes(userWhoFollowed)) {
+                const updatedFollowerList = followerList.filter(name => name !== userToUnfollow);
+                const updatedFolloweeList = followeeList.filter(name => name !== userWhoFollowed);
+                await User.findOneAndUpdate({username: userWhoFollowed}, {following: updatedFollowerList});
+                await User.findOneAndUpdate({username: userToUnfollow}, {followers: updatedFolloweeList});
+            }
         } catch (e) {
             throw e;
         }
